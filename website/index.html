@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Architect Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+:root{--brown:#3d2b1f;--brown-light:#6b4c37;--brown-dark:#1e1009;--cream:#f5efe6;--gold:#c9a96e;--gold-light:#e8d5b0;--text-light:#f0e8dc;--text-muted:#a89070;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--brown-dark);color:var(--cream);overflow-x:hidden;}
+.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));z-index:9999;width:0%;transition:width 0.08s linear;}
+
+/* ===== LETTER ANIMATION STYLES ===== */
+.char{display:inline-block;overflow:hidden;vertical-align:bottom;}
+.char-inner{display:inline-block;transform:translateX(-120%) skewX(-8deg);opacity:0;}
+
+/* ===== NAVBAR ===== */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(20,10,4,0.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(201,169,110,0.18);}
+.logo-area{display:flex;align-items:center;gap:10px;}
+.logo-area img{width:40px;height:40px;border-radius:6px;}
+.logo-text{font-family:'Playfair Display',serif;font-size:15px;letter-spacing:2px;color:var(--gold);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--gold);transition:all 0.3s;}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{text-decoration:none;color:var(--text-light);font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:400;transition:color 0.3s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform 0.3s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-links a:hover::after{transform:scaleX(1);}
+.nav-drawer{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,5,2,0.97);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:40px;}
+.nav-drawer.open{display:flex;}
+.nav-drawer a{text-decoration:none;font-family:'Playfair Display',serif;font-size:26px;color:var(--gold-light);transition:color 0.3s;}
+.nav-drawer a:hover{color:var(--gold);}
+
+/* ===== PAGE 1 ===== */
+#page1{min-height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;padding:100px 20px 60px;overflow:hidden;}
+.page1-bg{position:absolute;inset:0;background:var(--brown);z-index:0;}
+.page1-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(20,10,4,0.75) 0%,rgba(61,43,31,0.35) 100%);}
+.page1-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.4;}
+.page1-content{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:40px 60px;align-items:center;margin-top:20px;}
+.hero-left{display:flex;flex-direction:column;gap:20px;}
+.hero-image-wrap{position:relative;width:100%;max-width:330px;}
+.hero-image-wrap img,.hero-img-main{width:100%;aspect-ratio:330/370;object-fit:cover;border-radius:20px 20px 70px 20px;border:2px solid rgba(201,169,110,0.4);display:block;}
+.hero-quote-box{background:rgba(232,213,176,0.1);border-left:3px solid var(--gold);padding:14px 18px;border-radius:0 8px 8px 0;overflow:hidden;}
+.hero-quote-box p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;line-height:1.7;color:var(--gold-light);}
+.hero-right{display:flex;flex-direction:column;justify-content:center;gap:16px;}
+.hero-title{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);}
+.hero-name{font-family:'Playfair Display',serif;font-size:46px;font-weight:900;line-height:1.05;color:var(--cream);text-shadow:0 2px 40px rgba(0,0,0,0.5);}
+.hero-para{font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.85;color:var(--text-light);opacity:0.82;font-weight:300;}
+.cv-download-wrap{margin-top:6px;display:flex;gap:14px;flex-wrap:wrap;}
+.cv-btn{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--gold);border:1.5px solid var(--gold);padding:13px 30px;border-radius:10px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:500;text-decoration:none;transition:background 0.3s,color 0.3s,transform 0.2s;}
+.cv-btn:hover{background:var(--gold);color:var(--brown-dark);transform:translateY(-2px);}
+.cv-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;transition:transform 0.3s;}
+.cv-btn:hover svg{transform:translateY(2px);}
+.cv-btn-solid{background:var(--gold);color:var(--brown-dark);}
+.cv-btn-solid:hover{background:var(--gold-light);border-color:var(--gold-light);}
+button.cv-btn{cursor:pointer;-webkit-appearance:none;appearance:none;}
+.cv-btn:hover svg.eye-ico{transform:scale(1.2);}
+
+/* ===== PDF VIEWER MODAL ===== */
+.pdf-modal{position:fixed;inset:0;z-index:2000;display:none;flex-direction:column;background:rgba(10,5,2,0.97);}
+.pdf-modal.open{display:flex;}
+.pdf-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;background:rgba(20,10,4,0.98);border-bottom:1px solid rgba(201,169,110,0.22);}
+.pdf-title{font-family:'Playfair Display',serif;font-size:15px;letter-spacing:2px;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pdf-actions{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.pdf-dl{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--brown-dark);border:none;padding:10px 20px;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;font-weight:500;text-decoration:none;cursor:pointer;transition:background 0.3s,transform 0.2s;}
+.pdf-dl:hover{background:var(--gold-light);transform:translateY(-1px);}
+.pdf-dl svg,.pdf-close svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+.pdf-newtab{display:none;color:var(--gold-light);font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;}
+.pdf-close{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;background:transparent;color:var(--gold);border:1.5px solid rgba(201,169,110,0.5);border-radius:8px;cursor:pointer;transition:background 0.3s,color 0.3s;-webkit-appearance:none;}
+.pdf-close:hover{background:var(--gold);color:var(--brown-dark);}
+.pdf-frame-wrap{flex:1;min-height:0;}
+.pdf-frame{width:100%;height:100%;border:0;background:#2a2a2a;display:block;}
+.partners-strip{grid-column:1/-1;border-top:1px solid rgba(201,169,110,0.18);padding-top:28px;}
+.partners-label{font-size:9px;letter-spacing:4px;color:var(--text-muted);text-transform:uppercase;margin-bottom:14px;}
+.partners-logos{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.partner-placeholder{height:34px;padding:0 14px;border:1px dashed rgba(201,169,110,0.3);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;overflow:hidden;}
+.partner-placeholder img{max-height:100%;max-width:100%;object-fit:contain;}
+
+/* ===== BUILDING SECTION ===== */
+#building-section{position:relative;min-height:200vh;background:linear-gradient(180deg,var(--brown-dark) 0%,#080402 100%);}
+.building-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;margin-bottom:-100vh;}
+.building-svg-wrap{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:clamp(300px,90vw,1100px);height:115vh;}
+.bld-part{opacity:0;}
+.content-over-building{position:relative;z-index:10;}
+
+/* ===== PAGE 2 ===== */
+#page2{min-height:100vh;padding:80px 20px 60px;}
+.page2-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:1100px;margin:0 auto 60px;}
+.resume-col-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);margin-bottom:24px;padding-bottom:10px;border-bottom:1px solid rgba(201,169,110,0.22);overflow:hidden;}
+.resume-item{margin-bottom:22px;}
+.resume-item h4{font-size:14px;font-weight:500;color:var(--cream);margin-bottom:4px;}
+.resume-item span.tag{font-size:10px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.resume-item p{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--text-muted);margin-top:5px;line-height:1.6;}
+.skill-pill{display:inline-block;padding:6px 13px;margin:3px 4px 3px 0;border:1px solid rgba(201,169,110,0.38);border-radius:20px;font-size:11px;letter-spacing:1px;color:var(--gold-light);background:rgba(201,169,110,0.07);transition:background 0.3s;cursor:default;}
+.skill-pill:hover{background:rgba(201,169,110,0.18);border-color:var(--gold);}
+.stack-section{max-width:1100px;margin:0 auto;border-top:1px solid rgba(201,169,110,0.18);padding-top:44px;}
+.stack-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--gold);margin-bottom:22px;letter-spacing:2px;overflow:hidden;}
+.stack-logos{display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+.stack-placeholder{height:46px;width:90px;border:1px dashed rgba(201,169,110,0.28);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;overflow:hidden;}
+.stack-placeholder img{max-height:100%;max-width:100%;object-fit:contain;}
+
+/* ===== PAGE 3 ===== */
+#page3{min-height:100vh;padding:80px 20px 60px;}
+.section-heading{font-family:'Playfair Display',serif;font-size:46px;font-weight:900;color:var(--cream);text-align:center;margin-bottom:50px;overflow:hidden;}
+.section-heading::after{content:'';display:block;width:50px;height:2px;background:var(--gold);margin:14px auto 0;transform:scaleX(0);transition:transform 0.7s ease 0.5s;}
+.section-heading.anim-done::after{transform:scaleX(1);}
+
+/* ===== PROJECT CATEGORY CARDS ===== */
+.projects-categories{display:grid;grid-template-columns:1fr 1fr;gap:28px;max-width:1000px;margin:0 auto;}
+.category-card{position:relative;background:rgba(61,43,31,0.48);border:1px solid rgba(201,169,110,0.18);border-radius:18px;padding:48px 32px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;min-height:320px;cursor:pointer;overflow:hidden;transition:background 0.4s,border-color 0.4s,transform 0.4s;text-decoration:none;}
+.category-card::before{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(201,169,110,0.10) 0%,rgba(20,10,4,0.05) 60%);opacity:0;transition:opacity 0.4s;}
+.category-card:hover{background:rgba(107,76,55,0.5);border-color:var(--gold);transform:translateY(-8px);}
+.category-card:hover::before{opacity:1;}
+.category-icon{font-size:34px;color:var(--gold);opacity:0.85;margin-bottom:18px;}
+.category-number{position:absolute;top:24px;right:28px;font-family:'Playfair Display',serif;font-size:46px;font-weight:900;color:rgba(201,169,110,0.16);}
+.category-card h3{font-family:'Playfair Display',serif;font-size:28px;color:var(--cream);margin-bottom:10px;}
+.category-card p{font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.7;color:var(--text-muted);margin-bottom:20px;max-width:340px;}
+.category-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.category-tag{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);border:1px solid rgba(201,169,110,0.3);border-radius:14px;padding:5px 12px;background:rgba(201,169,110,0.06);}
+.category-link{display:inline-flex;align-items:center;gap:10px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500;}
+.category-arrow{font-size:18px;transition:transform 0.3s;}
+.category-card:hover .category-arrow{transform:translateX(6px);}
+
+@media(max-width:768px){
+  .projects-categories{grid-template-columns:1fr;gap:20px;}
+  .category-card{min-height:260px;padding:36px 26px;}
+  .category-card h3{font-size:24px;}
+}
+
+/* ===== PAGE 4 : CONTACT ME (one screen: 2/3 banner + 1/3 details) ===== */
+#page4{position:relative;z-index:20;display:flex;flex-direction:column;height:100vh;min-height:560px;background:#140a04;}
+.contact-hero{position:relative;flex:2;min-height:0;display:flex;align-items:flex-end;padding:0 8vw 44px;overflow:hidden;background:var(--brown);}
+.contact-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+.contact-hero::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(20,10,4,0.82) 0%,rgba(20,10,4,0.45) 55%,rgba(20,10,4,0.15) 100%),linear-gradient(180deg,rgba(20,10,4,0) 65%,rgba(20,10,4,0.9) 100%);}
+.contact-hero-inner{position:relative;z-index:2;max-width:1100px;width:100%;margin:0 auto;}
+.contact-eyebrow{display:block;font-size:10px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.contact-hero-title{font-family:'Playfair Display',serif;font-size:clamp(40px,6vw,64px);font-weight:900;line-height:1.1;color:var(--cream);text-shadow:0 2px 40px rgba(0,0,0,0.5);margin-bottom:10px;}
+.contact-hero-sub{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;color:var(--gold-light);max-width:520px;line-height:1.6;}
+.reach-section{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 20px;text-align:center;background:linear-gradient(180deg,#140a04 0%,var(--brown-dark) 100%);border-top:1px solid rgba(201,169,110,0.18);}
+.reach-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--cream);}
+.reach-line{width:46px;height:2px;background:var(--gold);margin:10px auto 20px;}
+.reach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%;max-width:980px;}
+.reach-card{background:rgba(61,43,31,0.48);border:1px solid rgba(201,169,110,0.2);border-radius:14px;padding:18px 20px;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:16px;text-align:left;text-decoration:none;transition:transform 0.4s,border-color 0.4s,background 0.4s;}
+.reach-card:hover{transform:translateY(-6px);border-color:var(--gold);background:rgba(107,76,55,0.5);}
+.reach-icon{flex:0 0 46px;width:46px;height:46px;border-radius:50%;border:1px solid rgba(201,169,110,0.4);background:rgba(201,169,110,0.08);display:flex;align-items:center;justify-content:center;}
+.reach-icon svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.reach-text{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.reach-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
+.reach-val{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--cream);word-break:break-word;}
+footer{background:var(--brown-dark);text-align:center;padding:22px;font-size:9px;color:var(--text-muted);letter-spacing:3px;border-top:1px solid rgba(201,169,110,0.1);}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  .hamburger{display:flex;}.nav-links{display:none;}
+  .logo-text{font-size:13px;letter-spacing:1.5px;}
+  #page1{padding:90px 18px 50px;}
+  .page1-content{grid-template-columns:1fr;gap:28px;}
+  .hero-left{align-items:center;}
+  .hero-image-wrap{max-width:240px;margin:0 auto;}
+  .hero-right{align-items:center;text-align:center;}
+  .hero-name{font-size:38px;}
+  .hero-para{font-size:15px;text-align:center;}
+  .cv-download-wrap{align-self:center;justify-content:center;}
+  .pdf-bar{padding:10px 14px;}
+  .pdf-title{font-size:13px;letter-spacing:1px;}
+  .pdf-dl{padding:9px 14px;letter-spacing:1.5px;}
+  .pdf-newtab{display:inline;}
+  .partners-strip{grid-column:1;}
+  .building-svg-wrap{width:100vw;}
+  #page2{padding:60px 18px 50px;}
+  .page2-grid{grid-template-columns:1fr;gap:0;}
+  #page3{padding:60px 18px 50px;}
+  .section-heading{font-size:36px;margin-bottom:36px;}
+  #page4{height:auto;min-height:100vh;}
+  .contact-hero{flex:none;min-height:56vh;padding:0 22px 36px;}
+  .contact-hero-sub{font-size:16px;}
+  .reach-section{flex:none;padding:30px 18px 36px;}
+  .reach-grid{grid-template-columns:1fr;gap:14px;}
+  .reach-card{justify-content:flex-start;}
+}
+@media(max-width:480px){
+  .hero-name{font-size:32px;}
+  .section-heading{font-size:30px;}
+}
+</style>
+</head>
+<body>
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="nav-drawer" id="navDrawer">
+  <a href="#page1" onclick="closeNav()">Home</a>
+  <a href="#page2" onclick="closeNav()">About Me</a>
+  <a href="#page3" onclick="closeNav()">Projects</a>
+  <a href="#page4" onclick="closeNav()">Contact</a>
+</div>
+<nav class="navbar">
+  <div class="logo-area">
+    <img src="logo1.jpeg" alt="Logo" onerror="this.style.display='none'">
+    <span class="logo-text">jayasankar.k</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#page1">Home</a></li>
+    <li><a href="#page2">About Me</a></li>
+    <li><a href="#page3">Projects</a></li>
+    <li><a href="#page4">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section id="page1">
+  <div class="page1-bg">
+    <img class="page1-bg-img" src="jayan2.jpeg" alt="" onerror="this.style.display='none'">
+  </div>
+  <div class="page1-content">
+    <div class="hero-left">
+      <div class="hero-image-wrap">
+        <img class="hero-img-main" src="jayan2.jpeg" alt="Jayasankar" onerror="this.style.background='rgba(107,76,55,0.28)';this.alt=''">
+      </div>
+      <div class="hero-quote-box">
+        <p>"Architecture is the art of how to waste space with purpose and beauty."</p>
+      </div>
+    </div>
+    <div class="hero-right">
+      <p class="hero-title">Architect &amp; Designer</p>
+      <h1 class="hero-name" id="heroName">Jayasankar</h1>
+      <p class="hero-para">With a vision shaped by years of designing spaces where human experience meets structural poetry, I bring each project to life through meticulous craft and an eye for the extraordinary.</p>
+      <div class="cv-download-wrap">
+        <button type="button" class="cv-btn" data-pdf="jayasankarCV.pdf" data-title="Curriculum Vitae" data-filename="Jayasankar-CV.pdf">
+          View CV
+          <svg class="eye-ico" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+        <button type="button" class="cv-btn cv-btn-solid" data-pdf="PORTFOLIO.pdf" data-title="Portfolio" data-filename="Jayasankar-Portfolio.pdf">
+          View Portfolio
+          <svg class="eye-ico" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="partners-strip">
+      <p class="partners-label">Partnership with these companies</p>
+      <div class="partners-logos">
+        <div class="partner-placeholder"><img src="ABS.jpeg" alt="Company 1" onerror="this.style.display='none';this.parentNode.textContent='Company 1'"></div>
+        <div class="partner-placeholder"><img src="fitstruct.jpeg" alt="Company 2" onerror="this.style.display='none';this.parentNode.textContent='Company 2'"></div>
+        <!-- <div class="partner-placeholder"><img src="company3.jpeg" alt="Company 3" onerror="this.style.display='none';this.parentNode.textContent='Company 3'"></div>
+        <div class="partner-placeholder"><img src="company4.jpeg" alt="Company 4" onerror="this.style.display='none';this.parentNode.textContent='Company 4'"></div>
+        <div class="partner-placeholder"><img src="company5.jpeg" alt="Company 5" onerror="this.style.display='none';this.parentNode.textContent='Company 5'"></div> -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="building-section">
+  <div class="building-sticky">
+    <div class="building-svg-wrap">
+      <svg viewBox="100 0 500 950" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMax meet">
+        <defs>
+          <linearGradient id="glassL" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1208" stop-opacity="0.97"/><stop offset="40%" stop-color="#140e06" stop-opacity="0.95"/><stop offset="100%" stop-color="#0a0703" stop-opacity="0.99"/></linearGradient>
+          <linearGradient id="glassR" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0703" stop-opacity="0.99"/><stop offset="50%" stop-color="#140e06" stop-opacity="0.96"/><stop offset="100%" stop-color="#1a1208" stop-opacity="0.97"/></linearGradient>
+          <linearGradient id="glassShimL" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0%" stop-color="#c9a96e" stop-opacity="0.0"/><stop offset="30%" stop-color="#e8d5b0" stop-opacity="0.06"/><stop offset="60%" stop-color="#c9a96e" stop-opacity="0.02"/><stop offset="100%" stop-color="#c9a96e" stop-opacity="0.0"/></linearGradient>
+          <linearGradient id="glassShimR" x1="1" y1="0" x2="0" y2="0.3"><stop offset="0%" stop-color="#c9a96e" stop-opacity="0.0"/><stop offset="30%" stop-color="#e8d5b0" stop-opacity="0.05"/><stop offset="60%" stop-color="#c9a96e" stop-opacity="0.02"/><stop offset="100%" stop-color="#c9a96e" stop-opacity="0.0"/></linearGradient>
+          <linearGradient id="frameMain" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3a2e22"/><stop offset="35%" stop-color="#2e2318"/><stop offset="70%" stop-color="#241a10"/><stop offset="100%" stop-color="#1c130a"/></linearGradient>
+          <linearGradient id="frameEdge" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#4a3a28"/><stop offset="50%" stop-color="#3a2e22"/><stop offset="100%" stop-color="#241a10"/></linearGradient>
+          <linearGradient id="podium" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2e2318"/><stop offset="100%" stop-color="#1a1008"/></linearGradient>
+          <linearGradient id="podiumGlass" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0e0a05" stop-opacity="0.92"/><stop offset="100%" stop-color="#050302" stop-opacity="0.98"/></linearGradient>
+          <linearGradient id="frameLit" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4a3a28"/><stop offset="25%" stop-color="#3a2e22"/><stop offset="70%" stop-color="#2a2016"/><stop offset="100%" stop-color="#1c130a"/></linearGradient>
+          <linearGradient id="louverShad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#000000" stop-opacity="0.25"/><stop offset="100%" stop-color="#000000" stop-opacity="0.0"/></linearGradient>
+          <radialGradient id="greenGrad" cx="45%" cy="40%"><stop offset="0%" stop-color="#1c3a14"/><stop offset="60%" stop-color="#122810"/><stop offset="100%" stop-color="#091808"/></radialGradient>
+          <radialGradient id="greenGrad2" cx="55%" cy="35%"><stop offset="0%" stop-color="#183210"/><stop offset="100%" stop-color="#091408"/></radialGradient>
+          <linearGradient id="aoGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0500" stop-opacity="0.0"/><stop offset="100%" stop-color="#000000" stop-opacity="0.7"/></linearGradient>
+          <linearGradient id="warmGlow" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c9a96e" stop-opacity="0.07"/><stop offset="100%" stop-color="#e8d5b0" stop-opacity="0.03"/></linearGradient>
+          <linearGradient id="colGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3a2e22"/><stop offset="40%" stop-color="#4a3a28"/><stop offset="100%" stop-color="#241a10"/></linearGradient>
+        </defs>
+        <g id="bld-ground" class="bld-part">
+          <rect x="60" y="924" width="580" height="14" rx="2" fill="#0a0703"/>
+          <rect x="60" y="920" width="580" height="5" rx="1" fill="#c9a96e" opacity="0.28"/>
+          <ellipse cx="350" cy="928" rx="270" ry="10" fill="#000000" opacity="0.55"/>
+          <ellipse cx="100" cy="922" rx="35" ry="7" fill="#0e2009" opacity="0.75"/>
+          <ellipse cx="600" cy="922" rx="35" ry="7" fill="#0e2009" opacity="0.75"/>
+        </g>
+        <g id="bld-foundation" class="bld-part">
+          <rect x="82" y="838" width="536" height="82" rx="0" fill="url(#podium)"/>
+          <rect x="96" y="846" width="508" height="68" rx="0" fill="url(#podiumGlass)"/>
+          <line x1="96" y1="861" x2="604" y2="861" stroke="#c9a96e" stroke-width="0.5" opacity="0.1"/>
+          <line x1="96" y1="877" x2="604" y2="877" stroke="#c9a96e" stroke-width="0.5" opacity="0.1"/>
+          <line x1="96" y1="893" x2="604" y2="893" stroke="#c9a96e" stroke-width="0.5" opacity="0.1"/>
+          <line x1="140" y1="846" x2="140" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="165" y1="846" x2="165" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="190" y1="846" x2="190" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="215" y1="846" x2="215" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="240" y1="846" x2="240" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="265" y1="846" x2="265" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="290" y1="846" x2="290" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="315" y1="846" x2="315" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="340" y1="846" x2="340" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="365" y1="846" x2="365" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="390" y1="846" x2="390" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="415" y1="846" x2="415" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="440" y1="846" x2="440" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="465" y1="846" x2="465" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="490" y1="846" x2="490" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="515" y1="846" x2="515" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="540" y1="846" x2="540" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <line x1="565" y1="846" x2="565" y2="914" stroke="#c9a96e" stroke-width="1.0" opacity="0.15"/>
+          <rect x="148" y="908" width="16" height="22" rx="0" fill="url(#colGrad)"/>
+          <rect x="210" y="908" width="16" height="22" rx="0" fill="url(#colGrad)"/>
+          <rect x="272" y="908" width="16" height="22" rx="0" fill="url(#colGrad)"/>
+          <rect x="334" y="908" width="16" height="22" rx="0" fill="url(#colGrad)"/>
+          <rect x="396" y="908" width="16" height="22" rx="0" fill="url(#colGrad)"/>
+          <rect x="458" y="908" width="16" height="22" rx="0" fill="url(#colGrad)"/>
+          <rect x="520" y="908" width="16" height="22" rx="0" fill="url(#colGrad)"/>
+          <rect x="546" y="908" width="16" height="22" rx="0" fill="url(#colGrad)"/>
+          <rect x="82" y="833" width="536" height="9" fill="#3a2e22"/>
+          <rect x="82" y="830" width="536" height="4" fill="#4a3a28"/>
+          <text x="350" y="878" text-anchor="middle" font-family="Montserrat,sans-serif" font-size="13" letter-spacing="6" fill="#c9a96e" opacity="0.6">ARCHVISION</text>
+          <ellipse cx="350" cy="828" rx="24" ry="34" fill="url(#greenGrad)" opacity="0.95"/>
+          <ellipse cx="350" cy="818" rx="15" ry="22" fill="#122810" opacity="0.85"/>
+          <rect x="347" y="850" width="6" height="14" rx="1" fill="#0a1a07"/>
+          <ellipse cx="110" cy="918" rx="22" ry="8" fill="url(#greenGrad2)" opacity="0.9"/>
+          <ellipse cx="590" cy="918" rx="22" ry="8" fill="url(#greenGrad2)" opacity="0.9"/>
+        </g>
+        <g id="bld-floor0" class="bld-part">
+          <rect x="112" y="458" width="236" height="380" fill="url(#glassL)"/>
+          <rect x="112" y="458" width="236" height="380" fill="url(#glassShimL)"/>
+          <line x1="128" y1="458" x2="128" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="144" y1="458" x2="144" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="160" y1="458" x2="160" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="176" y1="458" x2="176" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="192" y1="458" x2="192" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="208" y1="458" x2="208" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="224" y1="458" x2="224" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="240" y1="458" x2="240" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="256" y1="458" x2="256" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="272" y1="458" x2="272" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="288" y1="458" x2="288" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="304" y1="458" x2="304" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="320" y1="458" x2="320" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.2"/>
+          <line x1="112" y1="498" x2="348" y2="498" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="112" y1="538" x2="348" y2="538" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="112" y1="578" x2="348" y2="578" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="112" y1="618" x2="348" y2="618" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="112" y1="658" x2="348" y2="658" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="112" y1="698" x2="348" y2="698" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="112" y1="738" x2="348" y2="738" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="112" y1="778" x2="348" y2="778" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="112" y1="818" x2="348" y2="818" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <rect x="114" y="459" width="234" height="378" fill="url(#warmGlow)"/>
+          <rect x="112" y="458" width="60" height="380" fill="url(#louverShad)" opacity="0.5"/>
+        </g>
+        <g id="bld-floor1" class="bld-part">
+          <rect x="352" y="300" width="234" height="538" fill="url(#glassR)"/>
+          <rect x="352" y="300" width="234" height="538" fill="url(#glassShimR)"/>
+          <line x1="368" y1="300" x2="368" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="384" y1="300" x2="384" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="400" y1="300" x2="400" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="416" y1="300" x2="416" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="432" y1="300" x2="432" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="448" y1="300" x2="448" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="464" y1="300" x2="464" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="480" y1="300" x2="480" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="496" y1="300" x2="496" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="512" y1="300" x2="512" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="528" y1="300" x2="528" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="544" y1="300" x2="544" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="560" y1="300" x2="560" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="576" y1="300" x2="576" y2="838" stroke="#c9a96e" stroke-width="1.2" opacity="0.18"/>
+          <line x1="352" y1="340" x2="586" y2="340" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="380" x2="586" y2="380" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="420" x2="586" y2="420" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="460" x2="586" y2="460" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="500" x2="586" y2="500" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="540" x2="586" y2="540" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="580" x2="586" y2="580" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="620" x2="586" y2="620" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="660" x2="586" y2="660" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="700" x2="586" y2="700" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="740" x2="586" y2="740" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="780" x2="586" y2="780" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <line x1="352" y1="820" x2="586" y2="820" stroke="#c9a96e" stroke-width="0.6" opacity="0.1"/>
+          <rect x="354" y="302" width="230" height="534" fill="url(#warmGlow)"/>
+          <rect x="530" y="300" width="56" height="538" fill="url(#louverShad)" opacity="0.35"/>
+        </g>
+        <g id="bld-floor2" class="bld-part">
+          <path d="M 110,838 L 110,498 Q 110,415 155,368 Q 196,322 236,293 Q 272,264 302,244 Q 326,228 346,219 L 346,238 Q 324,248 298,264 Q 268,284 232,312 Q 194,342 158,386 Q 128,425 128,498 L 128,838 Z" fill="url(#frameMain)"/>
+          <path d="M 110,838 L 110,498 Q 110,415 155,368 Q 196,322 236,293 Q 272,264 302,244 Q 326,228 346,219" fill="none" stroke="#c9a96e" stroke-width="1.5" opacity="0.35" stroke-linecap="round"/>
+          <path d="M 128,838 L 128,500 Q 128,427 162,383 Q 196,340 232,312 Q 264,286 292,270 Q 316,255 336,246" fill="none" stroke="#1a1208" stroke-width="5.5" opacity="0.7" stroke-linecap="round"/>
+          <path d="M 110,838 L 110,498 Q 110,415 155,368 Q 196,322 236,293 Q 272,264 302,244 Q 326,228 346,219 L 346,238 Q 324,248 298,264 Q 268,284 232,312 Q 194,342 158,386 Q 128,425 128,498 L 128,838 Z" fill="url(#aoGrad)" opacity="0.4"/>
+        </g>
+        <g id="bld-floor3" class="bld-part">
+          <path d="M 590,838 L 590,380 Q 590,308 566,265 Q 542,224 512,196 Q 484,170 458,154 Q 430,138 408,130 Q 388,124 370,120 L 370,139 Q 392,145 412,153 Q 434,163 460,178 Q 486,194 512,218 Q 542,246 564,282 Q 582,315 582,380 L 582,838 Z" fill="url(#frameMain)"/>
+          <path d="M 590,838 L 590,380 Q 590,308 566,265 Q 542,224 512,196 Q 484,170 458,154 Q 430,138 408,130 Q 388,124 370,120" fill="none" stroke="#c9a96e" stroke-width="1.5" opacity="0.32" stroke-linecap="round"/>
+          <path d="M 590,838 L 590,380 Q 590,308 566,265 Q 542,224 512,196 Q 484,170 458,154 Q 430,138 408,130 Q 388,124 370,120 L 370,139 Q 392,145 412,153 Q 434,163 460,178 Q 486,194 512,218 Q 542,246 564,282 Q 582,315 582,380 L 582,838 Z" fill="url(#aoGrad)" opacity="0.35"/>
+        </g>
+        <g id="bld-floor4" class="bld-part">
+          <path d="M 338,219 Q 344,218 350,218 Q 356,218 364,219 Q 374,222 382,230 Q 402,258 412,306 Q 424,348 426,398 L 426,838 L 370,838 L 370,398 Q 368,350 358,308 Q 348,266 336,246 Q 330,234 326,229 Q 320,222 314,220 Q 322,218 330,218 Z" fill="url(#frameLit)"/>
+          <ellipse cx="350" cy="618" rx="17" ry="26" fill="url(#greenGrad)" opacity="0.95"/>
+          <ellipse cx="350" cy="607" rx="11" ry="17" fill="#122810" opacity="0.85"/>
+          <rect x="347" y="637" width="6" height="12" rx="1" fill="#091408" opacity="0.9"/>
+        </g>
+        <g id="bld-penthouse" class="bld-part">
+          <rect x="110" y="452" width="238" height="12" fill="url(#frameEdge)"/>
+          <rect x="112" y="432" width="234" height="22" fill="url(#frameMain)"/>
+          <rect x="112" y="432" width="234" height="3" fill="#c9a96e" opacity="0.25"/>
+          <ellipse cx="158" cy="428" rx="22" ry="13" fill="url(#greenGrad)" opacity="0.95"/>
+          <ellipse cx="198" cy="426" rx="17" ry="11" fill="#122810" opacity="0.9"/>
+          <ellipse cx="236" cy="430" rx="20" ry="12" fill="url(#greenGrad)" opacity="0.92"/>
+          <ellipse cx="274" cy="427" rx="16" ry="10" fill="#0e2009" opacity="0.88"/>
+          <ellipse cx="310" cy="429" rx="14" ry="9" fill="url(#greenGrad2)" opacity="0.85"/>
+        </g>
+        <g id="bld-roof" class="bld-part">
+          <rect x="352" y="296" width="234" height="10" fill="url(#frameEdge)"/>
+          <rect x="354" y="278" width="232" height="20" fill="url(#frameMain)"/>
+          <rect x="354" y="278" width="232" height="3" fill="#c9a96e" opacity="0.22"/>
+          <ellipse cx="390" cy="274" rx="17" ry="11" fill="url(#greenGrad)" opacity="0.92"/>
+          <ellipse cx="425" cy="272" rx="15" ry="10" fill="#122810" opacity="0.88"/>
+          <ellipse cx="460" cy="275" rx="20" ry="12" fill="url(#greenGrad)" opacity="0.95"/>
+          <ellipse cx="498" cy="272" rx="15" ry="10" fill="#0e2009" opacity="0.88"/>
+          <ellipse cx="532" cy="274" rx="18" ry="11" fill="url(#greenGrad)" opacity="0.9"/>
+          <ellipse cx="566" cy="273" rx="14" ry="9" fill="url(#greenGrad2)" opacity="0.85"/>
+          <ellipse cx="462" cy="256" rx="12" ry="22" fill="#122810" opacity="0.92"/>
+        </g>
+        <g id="bld-lights" class="bld-part">
+          <rect x="122" y="468" width="218" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <rect x="122" y="508" width="218" height="4" rx="1" fill="#c9a96e" opacity="0.1"/>
+          <rect x="122" y="548" width="218" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <rect x="122" y="588" width="218" height="4" rx="1" fill="#c9a96e" opacity="0.09"/>
+          <rect x="122" y="628" width="218" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <rect x="122" y="668" width="218" height="4" rx="1" fill="#c9a96e" opacity="0.1"/>
+          <rect x="122" y="708" width="218" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <rect x="122" y="748" width="218" height="4" rx="1" fill="#c9a96e" opacity="0.09"/>
+          <rect x="122" y="788" width="218" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <rect x="362" y="310" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.1"/>
+          <rect x="362" y="350" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <rect x="362" y="390" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.1"/>
+          <rect x="362" y="430" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <rect x="362" y="470" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.09"/>
+          <rect x="362" y="510" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <rect x="362" y="550" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.1"/>
+          <rect x="362" y="590" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <rect x="362" y="630" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.09"/>
+          <rect x="362" y="670" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <rect x="362" y="710" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.1"/>
+          <rect x="362" y="750" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <rect x="362" y="790" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.09"/>
+          <rect x="362" y="820" width="212" height="4" rx="1" fill="#c9a96e" opacity="0.12"/>
+          <path d="M 110,838 L 110,498 Q 110,415 155,368 Q 196,322 236,293 Q 272,264 302,244 Q 326,228 346,219" fill="none" stroke="#c9a96e" stroke-width="1" opacity="0.3" stroke-linecap="round"/>
+          <path d="M 590,838 L 590,380 Q 590,308 566,265 Q 542,224 512,196 Q 484,170 458,154 Q 430,138 408,130 Q 388,124 370,120" fill="none" stroke="#c9a96e" stroke-width="1" opacity="0.28" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="content-over-building">
+    <section id="page2" style="padding-top:100px;">
+      <div class="page2-grid">
+        <div>
+          <h2 class="resume-col-title" data-letter-anim>Education</h2>
+          <div class="resume-item"><h4>Bachelor of Architecture</h4><span class="tag">2022 – 2027 · Lovely Professional University</span><p>Focused on sustainable urban design and the adaptive reuse of historical structures.</p></div>
+          <!-- <div class="resume-item"><h4>Master of Architecture – Urban Design</h4><span class="tag">2020 – 2022 · Your University</span><p>Thesis on biophilic design principles in high-density metropolitan environments.</p></div> -->
+          <h2 class="resume-col-title" style="margin-top:36px;" data-letter-anim>Experience</h2>
+          <div class="resume-item"><h4>junior Architect</h4><span class="tag">2023 june – 2023 july · ABS homeplans,kochi</span><p>Supervised daily construction activities.</p></div>
+          <div class="resume-item"><h4>freelancer</h4><span class="tag">2025 – 2026 present · ABS homeplans, fit struct</span><p>Worked under senior architects and designers on architectural planning, 3D modeling, and gym interior design projects. Assisted in design development, space planning, and project visualization to deliver functional and client-focused solutions.
+</p></div>
+          <h2 class="resume-col-title" style="margin-top:36px;" data-letter-anim>Certificates</h2>
+          <div class="resume-item"><h4>AutoCAD Professional Certification</h4><span class="tag">2023 · Autodesk</span><p>Certified proficiency in 2D drafting and technical drawing documentation.</p></div>
+          <div class="resume-item"><h4>SketchUp &amp; V-Ray Rendering</h4><span class="tag">2024 · Online Certification</span><p>Advanced training in 3D modeling and photorealistic visualization workflows.</p></div>
+          <div class="resume-item"><h4>Sustainable Design Practices Workshop</h4><span class="tag">2024 · Green Building Council</span><p>Completed coursework on energy-efficient and eco-conscious architectural strategies.</p></div>
+        </div>
+        <div>
+          <h2 class="resume-col-title" data-letter-anim>Soft Skills</h2>
+          <div style="margin-bottom:30px;">
+            <span class="skill-pill">Client Communication</span><span class="skill-pill">Team Leadership</span><span class="skill-pill">Problem Solving</span><span class="skill-pill">Critical Thinking</span><span class="skill-pill">Project Management</span><span class="skill-pill">Stakeholder Presentation</span><span class="skill-pill">Creative Direction</span>
+          </div>
+          <h2 class="resume-col-title" data-letter-anim>Hobbies</h2>
+          <div class="resume-item"><h4>Urban Photography</h4><p>Capturing the geometry of cities and the interplay of light in built spaces.</p></div>
+          <div class="resume-item"><h4>Rubik's cube solving</h4><p>Enhances problem-solving, logical reasoning, and concentration through efficient algorithm-based puzzle solving.</p></div>
+          <div class="resume-item"><h4>Travelling &amp; Cultural Research</h4><p>Studying vernacular architecture across diverse regions and climates.</p></div>
+          <h2 class="resume-col-title" style="margin-top:36px;" data-letter-anim>Languages</h2>
+          <div class="resume-item">
+            <span class="skill-pill">Malayalam – Fluent</span>
+            <span class="skill-pill">English – Fluent</span>
+            <span class="skill-pill">Tamil – Intermediate</span>
+            <span class="skill-pill">Hindi – Intermediate</span>
+          </div>
+        </div>
+      </div>
+      <div class="stack-section">
+        <h3 class="stack-title" data-letter-anim>My Creative Stack</h3>
+        <div class="stack-logos">
+          <div class="stack-placeholder"><img src="4.png" alt="Tool 1" onerror="this.style.display='none';this.parentNode.textContent='Tool 1'"></div><div class="stack-placeholder"><img src="5.png" alt="Tool 2" onerror="this.style.display='none';this.parentNode.textContent='Tool 2'"></div><div class="stack-placeholder"><img src="6.png" alt="Tool 3" onerror="this.style.display='none';this.parentNode.textContent='Tool 3'"></div><div class="stack-placeholder"><img src="7.png" alt="Tool 4" onerror="this.style.display='none';this.parentNode.textContent='Tool 4'"></div><div class="stack-placeholder"><img src="8.png" alt="Tool 5" onerror="this.style.display='none';this.parentNode.textContent='Tool 5'"></div><div class="stack-placeholder"><img src="9.png" alt="Tool 5" onerror="this.style.display='none';this.parentNode.textContent='Tool 5'"></div><div class="stack-placeholder"><img src="10.png" alt="Tool 5" onerror="this.style.display='none';this.parentNode.textContent='Tool 5'"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page3">
+      <h2 class="section-heading" data-letter-anim>Projects</h2>
+      <div class="projects-categories">
+        <a href="freelance.html" class="category-card">
+          <span class="category-number">01</span>
+          <span class="category-icon">&#9670;</span>
+          <h3>Freelance Work</h3>
+          <p>Independent commissions spanning residential, hospitality, and commercial design — delivered for private clients and studios.</p>
+          <div class="category-tags">
+            <span class="category-tag">Residential</span>
+            <span class="category-tag">Hospitality</span>
+            <span class="category-tag">Commercial</span>
+          </div>
+          <span class="category-link">View Projects <span class="category-arrow">→</span></span>
+        </a>
+        <a href="academic.html" class="category-card">
+          <span class="category-number">02</span>
+          <span class="category-icon">&#9671;</span>
+          <h3>Academic Work</h3>
+          <p>Research-driven studio projects and thesis work exploring sustainability, adaptive reuse, and urban design theory.</p>
+          <div class="category-tags">
+            <span class="category-tag">Studio Projects</span>
+            <span class="category-tag">Thesis</span>
+            <span class="category-tag">Research</span>
+          </div>
+          <span class="category-link">View Projects <span class="category-arrow">→</span></span>
+        </a>
+      </div>
+    </section>
+  </div>
+</div>
+
+<section id="page4">
+  <div class="contact-hero">
+    <img class="contact-hero-img" src="contactcoverpage.png" alt="" onerror="this.style.display='none'">
+    <div class="contact-hero-inner">
+      <span class="contact-eyebrow">Get in touch</span>
+      <h2 class="contact-hero-title" data-letter-anim>Contact Me</h2>
+      <p class="contact-hero-sub">Have a project in mind? Let's build something extraordinary together.</p>
+    </div>
+  </div>
+  <div class="reach-section">
+    <h3 class="reach-title">Reach Me</h3>
+    <div class="reach-line"></div>
+    <div class="reach-grid">
+      <div class="reach-card">
+        <div class="reach-icon"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div>
+        <div class="reach-text"><span class="reach-label">Location</span><span class="reach-val">New Delhi, India</span></div>
+      </div>
+      <a class="reach-card" href="tel:+910000000000">
+        <div class="reach-icon"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></div>
+        <div class="reach-text"><span class="reach-label">Phone</span><span class="reach-val">+91 00000 00000</span></div>
+      </a>
+      <a class="reach-card" href="mailto:hello@yourname.com">
+        <div class="reach-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+        <div class="reach-text"><span class="reach-label">Email</span><span class="reach-val">hello@yourname.com</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="pdf-modal" id="pdfModal" role="dialog" aria-modal="true" aria-label="PDF viewer">
+  <div class="pdf-bar">
+    <span class="pdf-title" id="pdfTitle">Document</span>
+    <div class="pdf-actions">
+      <a class="pdf-newtab" id="pdfNewTab" href="#" target="_blank" rel="noopener">Open</a>
+      <a class="pdf-dl" id="pdfDownload" href="#" download>
+        Download
+        <svg viewBox="0 0 24 24"><path d="M12 4v12m0 0l-5-5m5 5l5-5M5 20h14"/></svg>
+      </a>
+      <button type="button" class="pdf-close" id="pdfClose" aria-label="Close">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="pdf-frame-wrap">
+    <iframe class="pdf-frame" id="pdfFrame" title="PDF preview" src="about:blank"></iframe>
+  </div>
+</div>
+
+<footer>&copy; 2026 ARCHVISION · All Rights Reserved</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* =============================================
+   CORE LETTER SPLIT & ANIMATE UTILITY
+============================================= */
+function splitAndAnimate(el, triggerEl, startPos, delayOffset) {
+  if (!el) return;
+  const raw = el.textContent;
+  el.innerHTML = '';
+  el.style.overflow = 'hidden';
+  const inners = [];
+
+  for (let i = 0; i < raw.length; i++) {
+    const ch = raw[i];
+    if (ch === ' ') {
+      el.appendChild(document.createTextNode('\u00A0'));
+    } else {
+      const outer = document.createElement('span');
+      outer.className = 'char';
+      outer.style.cssText = 'display:inline-block;overflow:hidden;vertical-align:bottom;';
+      const inner = document.createElement('span');
+      inner.className = 'char-inner';
+      inner.style.cssText = 'display:inline-block;';
+      inner.textContent = ch;
+      outer.appendChild(inner);
+      el.appendChild(outer);
+      inners.push(inner);
+    }
+  }
+
+  gsap.fromTo(inners,
+    { x: -90, opacity: 0, skewX: -10 },
+    {
+      x: 0,
+      opacity: 1,
+      skewX: 0,
+      duration: 0.55,
+      ease: 'power3.out',
+      stagger: 0.032,
+      delay: delayOffset || 0,
+      scrollTrigger: {
+        trigger: triggerEl || el,
+        start: startPos || 'top 84%',
+        toggleActions: 'play none none none'
+      }
+    }
+  );
+}
+
+/* =============================================
+   HERO NAME — fires on page load, from left
+============================================= */
+window.addEventListener('load', () => {
+  const hn = document.getElementById('heroName');
+  if (!hn) return;
+  const raw = hn.textContent;
+  hn.innerHTML = '';
+  hn.style.overflow = 'hidden';
+  const inners = [];
+  for (let i = 0; i < raw.length; i++) {
+    const outer = document.createElement('span');
+    outer.style.cssText = 'display:inline-block;overflow:hidden;vertical-align:bottom;';
+    const inner = document.createElement('span');
+    inner.style.cssText = 'display:inline-block;';
+    inner.textContent = raw[i];
+    outer.appendChild(inner);
+    hn.appendChild(outer);
+    inners.push(inner);
+  }
+  gsap.fromTo(inners,
+    { x: -110, opacity: 0, skewX: -14 },
+    { x: 0, opacity: 1, skewX: 0, duration: 0.75, ease: 'power3.out', stagger: 0.045, delay: 0.4 }
+  );
+});
+
+/* =============================================
+   ALL [data-letter-anim] ELEMENTS
+============================================= */
+document.querySelectorAll('[data-letter-anim]').forEach(el => {
+  splitAndAnimate(el, el, 'top 86%');
+});
+
+/* =============================================
+   CONTACT HERO
+============================================= */
+gsap.from('.contact-eyebrow, .contact-hero-sub', {
+  scrollTrigger: { trigger: '#page4', start: 'top 70%' },
+  x: -50, opacity: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out'
+});
+
+/* =============================================
+   SCROLL PROGRESS
+============================================= */
+window.addEventListener('scroll', () => {
+  const p = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('scrollProgress').style.width = p + '%';
+});
+
+/* =============================================
+   HAMBURGER
+============================================= */
+const hamburger = document.getElementById('hamburger');
+const navDrawer = document.getElementById('navDrawer');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  navDrawer.classList.toggle('open');
+});
+function closeNav() {
+  hamburger.classList.remove('open');
+  navDrawer.classList.remove('open');
+}
+
+/* =============================================
+   ENTRY ANIMATIONS (non-letter)
+============================================= */
+gsap.from('.navbar', { y: -60, opacity: 0, duration: 1, ease: 'power3.out' });
+gsap.from('.hero-title', { x: -50, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.55 });
+gsap.from('.hero-para', { x: -60, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.85 });
+gsap.from('.cv-download-wrap', { x: -60, opacity: 0, duration: 1, ease: 'power3.out', delay: 1.0 });
+gsap.from('.hero-image-wrap', { x: -80, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 0.25 });
+gsap.from('.hero-quote-box', { x: -60, opacity: 0, duration: 1, ease: 'power3.out', delay: 1.05 });
+gsap.from('.partners-strip', { y: 30, opacity: 0, duration: 1, ease: 'power3.out', delay: 1.3 });
+
+/* =============================================
+   BUILDING SCROLL ANIMATION
+============================================= */
+const tl = gsap.timeline({
+  scrollTrigger: {
+    trigger: '#building-section',
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 1.8,
+  }
+});
+tl
+  .to('#bld-ground', { opacity: 1, duration: 0.4 })
+  .fromTo('#bld-foundation', { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 })
+  .fromTo('#bld-floor0', { y: 90, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, '+=0.1')
+  .fromTo('#bld-floor1', { y: 90, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, '+=0.15')
+  .fromTo('#bld-floor2', { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, '+=0.15')
+  .fromTo('#bld-floor3', { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9 }, '+=0.15')
+  .fromTo('#bld-floor4', { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9 }, '+=0.15')
+  .fromTo('#bld-penthouse', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '+=0.15')
+  .fromTo('#bld-roof', { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '+=0.15')
+  .to('#bld-lights', { opacity: 1, duration: 0.6, ease: 'power2.inOut' }, '+=0.2');
+
+/* =============================================
+   SECTION CONTENT ANIMATIONS
+============================================= */
+gsap.from('#page2 .resume-item', {
+  scrollTrigger: { trigger: '#page2', start: 'top 76%' },
+  x: -50, opacity: 0, duration: 0.65, stagger: 0.1, ease: 'power3.out'
+});
+gsap.from('#page2 .skill-pill', {
+  scrollTrigger: { trigger: '#page2', start: 'top 70%' },
+  x: -30, opacity: 0, duration: 0.5, stagger: 0.06, ease: 'power3.out'
+});
+gsap.from('.stack-placeholder', {
+  scrollTrigger: { trigger: '.stack-section', start: 'top 88%' },
+  x: -40, opacity: 0, duration: 0.55, stagger: 0.08, ease: 'power3.out'
+});
+
+// Gold underline reveal on Projects heading
+ScrollTrigger.create({
+  trigger: '#page3',
+  start: 'top 82%',
+  onEnter: () => {
+    const h = document.querySelector('.section-heading');
+    if (h) h.classList.add('anim-done');
+  }
+});
+
+gsap.from('.category-card', {
+  scrollTrigger: { trigger: '#page3', start: 'top 78%' },
+  y: 60, opacity: 0, duration: 0.75, stagger: 0.15, ease: 'power3.out'
+});
+gsap.from('.reach-title, .reach-line', {
+  scrollTrigger: { trigger: '#page4', start: 'top 60%' },
+  y: 30, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out'
+});
+gsap.from('.reach-card', {
+  scrollTrigger: { trigger: '#page4', start: 'top 60%' },
+  y: 60, opacity: 0, duration: 0.75, stagger: 0.15, ease: 'power3.out'
+});
+gsap.to('.page1-bg', {
+  scrollTrigger: { trigger: '#page1', scrub: true },
+  y: 80
+});
+
+/* =============================================
+   PDF VIEWER (View CV / View Portfolio)
+============================================= */
+const pdfModal = document.getElementById('pdfModal');
+const pdfFrame = document.getElementById('pdfFrame');
+const pdfTitle = document.getElementById('pdfTitle');
+const pdfDownload = document.getElementById('pdfDownload');
+const pdfNewTab = document.getElementById('pdfNewTab');
+
+function openPdf(src, title, filename) {
+  pdfTitle.textContent = title;
+  pdfDownload.href = src;
+  pdfDownload.setAttribute('download', filename || src);
+  pdfNewTab.href = src;
+  pdfFrame.src = src + '#toolbar=0&navpanes=0';
+  pdfModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePdf() {
+  pdfModal.classList.remove('open');
+  pdfFrame.src = 'about:blank';
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('[data-pdf]').forEach(btn => {
+  btn.addEventListener('click', () =>
+    openPdf(btn.dataset.pdf, btn.dataset.title, btn.dataset.filename));
+});
+document.getElementById('pdfClose').addEventListener('click', closePdf);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && pdfModal.classList.contains('open')) closePdf();
+});
+</script>
+</body>
+</html>
